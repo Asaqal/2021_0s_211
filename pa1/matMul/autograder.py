@@ -58,7 +58,7 @@ def test_matMul ( filenum, prefix=None, verbose=False ):
         print ("answers/matrix_c_{}.txt missing".format(filenum))
 
     try:
-        result = subprocess.check_output(command, shell=True).decode('ascii')
+        result = subprocess.check_output(command, shell=True, timeout=30).decode('ascii')
         resultlist = [int(string) for string in result.split()]
         # print ("answer")
         # print (answer)
@@ -69,6 +69,8 @@ def test_matMul ( filenum, prefix=None, verbose=False ):
     except subprocess.CalledProcessError as e:
         # print (e.output)
         print ("Calling ./matMul returned non-zero exit status.")
+    except subprocess.TimeoutExpired as ex:
+        print("Calling ./matmul resulted in a timeout")
     except AssertionError as e:
         print (result)
         print (e.args[0])

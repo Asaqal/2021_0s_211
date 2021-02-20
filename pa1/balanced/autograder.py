@@ -71,7 +71,7 @@ def test_balanced( filenum, prefix=None, verbose=False ):
         print ("answers/answer{}.txt missing".format(filenum))
 
     try:
-        result = subprocess.check_output(command, shell=True).decode('ascii')
+        result = subprocess.check_output(command, shell=True, timeout=30).decode('ascii')
         # print ("result")
         # print (result)
         assert answer == result, "Your answer doesn't match answers/answer{}.txt.".format(filenum)
@@ -79,6 +79,8 @@ def test_balanced( filenum, prefix=None, verbose=False ):
     except subprocess.CalledProcessError as e:
         # print (e.output)
         print ("Calling ./balanced returned non-zero exit status.")
+    except subprocess.TimeoutExpired as ex:
+        print("Calling ./balanced resulted in a timeout")
     except AssertionError as e:
         print (result)
         print (e.args[0])

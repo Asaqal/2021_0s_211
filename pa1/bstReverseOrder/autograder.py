@@ -71,7 +71,7 @@ def test_bstReverseOrder ( filenum, prefix=None, verbose=False ):
         print ("answers/answer{}.txt missing".format(filenum))
 
     try:
-        result = subprocess.check_output(command, shell=True).decode('ascii')
+        result = subprocess.check_output(command, shell=True, timeout=30).decode('ascii')
         resultlist = [int(string) for string in result.split()]
         # print ("answer")
         # print (answer)
@@ -82,6 +82,8 @@ def test_bstReverseOrder ( filenum, prefix=None, verbose=False ):
     except subprocess.CalledProcessError as e:
         # print (e.output)
         print ("Calling ./bstReverseOrder returned non-zero exit status.")
+    except subprocess.TimeoutExpired as ex:
+        print("Calling ./bstReverseOrder resulted in a timeout")
     except AssertionError as e:
         print (result)
         print (e.args[0])

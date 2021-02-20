@@ -29,12 +29,14 @@ def test_goldbach( number, prefix=None, verbose=False ):
     if verbose:
         print (command)
     try:
-        result = subprocess.check_output(command, shell=True).decode('ascii')
+        result = subprocess.check_output(command, shell=True, timeout=30).decode('ascii')
         validate_string (number, result)
         return True
     except subprocess.CalledProcessError as e:
         # print (e.output)
         print ("Calling ./goldbach returned non-zero exit status.")
+    except subprocess.TimeoutExpired as ex:
+        print("Calling ./goldbach resulted in a timeout")
     except AssertionError as e:
         print (result)
         print (e.args[0])
